@@ -6,7 +6,7 @@ import { RedisModule } from "./redis/redis.module";
 @Module({
     imports: [
         // OrmConnectModule,
-        RedisModule,
+        // RedisModule,
         MongodbModule
     ],
 })

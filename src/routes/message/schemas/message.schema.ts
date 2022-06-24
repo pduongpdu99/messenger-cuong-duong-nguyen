@@ -24,6 +24,9 @@ export class Message {
 
     @Prop({ type: mongoose.Schema.Types.Boolean })
     isDeleted: boolean = false;
+
+    @Prop({ type: mongoose.Schema.Types.Boolean })
+    hasReaded: boolean = false;
 }
 
 export const MessageSchema = SchemaFactory.createForClass(Message);

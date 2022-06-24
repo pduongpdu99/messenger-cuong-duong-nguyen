@@ -1,8 +1,18 @@
-import { Controller, Get, Param, ForbiddenException, HttpCode, Query, UseFilters } from '@nestjs/common';
+import {
+  Controller,
+  Get,
+  Param,
+  ForbiddenException,
+  HttpCode,
+  Query,
+  UseFilters,
+  Post,
+} from '@nestjs/common';
 import { UserService } from './user.service';
 import { BaseController } from 'src/base/base.api/base.controller';
 import { User } from './schemas/user.schema';
 import { HttpExceptionFilter } from 'src/common/filters/http-exception.filter';
+import { CreateUserDto } from './dto/create-user.dto';
 
 @Controller('users')
 export class UserController extends BaseController<User> {
@@ -10,30 +20,35 @@ export class UserController extends BaseController<User> {
     super(service);
   }
 
+  @Post()
+  async create(request: CreateUserDto) {
+    return this.service.create(request);
+  }
+
   /**
    * get user by token
-   * @param token 
-   * @returns 
+   * @param token
+   * @returns
    */
-  @Get("token/:token")
+  @Get('token/:token')
   async getUserByAccessToken(@Param('token') token: string) {
-    return this.service.findUserAtToken(token)
+    return this.service.findUserAtToken(token);
   }
 
   /**
    * get user by id
-   * @param id 
-   * @returns 
+   * @param id
+   * @returns
    */
-  @Get("find/:id")
+  @Get('find/:id')
   async getUserById(@Param('id') id: string) {
-    return this.service.find(id)
+    return this.service.find(id);
   }
 
   /**
    * get users with paginate method
-   * @param queryParams 
-   * @returns 
+   * @param queryParams
+   * @returns
    */
   @Get('paginate')
   @HttpCode(200)
@@ -47,5 +62,15 @@ export class UserController extends BaseController<User> {
     } catch (err) {
       throw new ForbiddenException();
     }
+  }
+
+  @Post('signin')
+  async validateUser(username: string, pass: string): Promise<any> {
+    const user = await this.service.find(username);
+    if (user && user.password === pass) {
+      const { password, ...result } = user;
+      return result;
+    }
+    return null;
   }
 }
