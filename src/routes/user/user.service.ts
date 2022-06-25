@@ -1,4 +1,8 @@
-import { Injectable, UnauthorizedException } from '@nestjs/common';
+import {
+  ConflictException,
+  Injectable,
+  UnauthorizedException,
+} from '@nestjs/common';
 import { InjectModel } from '@nestjs/mongoose';
 import { BaseService } from 'src/base/base.api/base.service';
 import { User } from './schemas/user.schema';
@@ -28,6 +32,19 @@ export class UserService extends BaseService<User> {
       password: this.getHashPassword(createDto.password),
       access_token: createDto.access_token,
     } as CreateUserDto;
+
+    const users = await this.userModel.find({
+      emailAddress: createDto.emailAddress,
+    });
+
+    // catch error if user exist
+    if (users.length > 0) {
+      throw new ConflictException({
+        statusCode: 409,
+        message: 'User conflicted: "This user current is exist"',
+      });
+    }
+
     return this.userModel.create(request);
   }
 

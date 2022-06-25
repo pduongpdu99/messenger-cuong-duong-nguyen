@@ -27,19 +27,23 @@ export class UserController extends BaseController<User> {
 
   /**
    * create
-   * @param request 
-   * @returns 
+   * @param request
+   * @returns
    */
   @Post()
   async create(request: CreateUserDto) {
-    const obj = new Objective();
-    obj.email = request.emailAddress;
-    obj.name = request.firstName;
+    try {
+      const obj = new Objective();
+      obj.email = request.emailAddress;
+      obj.name = request.firstName;
 
-    // send mail to user about welcome topic
-    this.mailService.sendUserWelcome(obj);
+      // send mail to user about welcome topic
+      this.mailService.sendUserWelcome(obj);
 
-    return this.service.create(request);
+      return this.service.create(request);
+    } catch (err) {
+      throw new ForbiddenException();
+    }
   }
 
   /**
