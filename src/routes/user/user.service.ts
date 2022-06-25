@@ -33,6 +33,7 @@ export class UserService extends BaseService<User> {
       access_token: createDto.access_token,
     } as CreateUserDto;
 
+    // filter user list by email address
     const users = await this.userModel.find({
       emailAddress: createDto.emailAddress,
     });
@@ -45,6 +46,7 @@ export class UserService extends BaseService<User> {
       });
     }
 
+    // user schema create 
     return this.userModel.create(request);
   }
 
