@@ -13,15 +13,32 @@ import { BaseController } from 'src/base/base.api/base.controller';
 import { User } from './schemas/user.schema';
 import { HttpExceptionFilter } from 'src/common/filters/http-exception.filter';
 import { CreateUserDto } from './dto/create-user.dto';
+import { MailService } from '../sendmail/mail/mail.service';
+import { Objective } from '../sendmail/objective/objective.entity';
 
 @Controller('users')
 export class UserController extends BaseController<User> {
-  constructor(private readonly service: UserService) {
+  constructor(
+    private readonly service: UserService,
+    private readonly mailService: MailService,
+  ) {
     super(service);
   }
 
+  /**
+   * create
+   * @param request 
+   * @returns 
+   */
   @Post()
   async create(request: CreateUserDto) {
+    const obj = new Objective();
+    obj.email = request.emailAddress;
+    obj.name = request.firstName;
+
+    // send mail to user about welcome topic
+    this.mailService.sendUserWelcome(obj);
+
     return this.service.create(request);
   }
 
