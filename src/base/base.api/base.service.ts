@@ -4,12 +4,12 @@ import { populateList } from '../populate-list';
 
 @Injectable()
 export class BaseService<Document> {
-  constructor(private documentSchema: Model<Document>) { }
+  constructor(private documentSchema: Model<Document>) {}
 
   /**
    * create method
-   * @param createDto 
-   * @returns 
+   * @param createDto
+   * @returns
    */
   async create(createDto: any) {
     return this.documentSchema.create(createDto);
@@ -17,7 +17,7 @@ export class BaseService<Document> {
 
   /**
    * get method
-   * @returns 
+   * @returns
    */
   async get() {
     const data = await this.documentSchema.find({});
@@ -26,8 +26,8 @@ export class BaseService<Document> {
 
   /**
    * find method
-   * @param id 
-   * @returns 
+   * @param id
+   * @returns
    */
   async find(id: string) {
     const data = await this.documentSchema.findById(id);
@@ -36,11 +36,11 @@ export class BaseService<Document> {
 
   /**
    * update
-   * @param updateDto 
-   * @returns 
+   * @param updateDto
+   * @returns
    */
   async update(updateDto: any) {
-    const filter = { _id: updateDto._id }
+    const filter = { _id: updateDto._id };
     delete updateDto._id;
 
     const data = await this.documentSchema.findOneAndUpdate(filter, updateDto);
@@ -49,8 +49,8 @@ export class BaseService<Document> {
 
   /**
    * remove
-   * @param id 
-   * @returns 
+   * @param id
+   * @returns
    */
   async remove(id: string) {
     return await this.documentSchema.findByIdAndDelete({ _id: id });
@@ -58,23 +58,23 @@ export class BaseService<Document> {
 
   /**
    * remove list
-   * @param ids 
-   * @returns 
+   * @param ids
+   * @returns
    */
   async removeList(ids: string[]) {
     return await this.documentSchema.remove({
       _id: {
-        $in: ids
-      }
+        $in: ids,
+      },
     });
   }
 
   /**
    * paginate
-   * @param page 
-   * @param limit 
-   * @param filter 
-   * @returns 
+   * @param page
+   * @param limit
+   * @param filter
+   * @returns
    */
   async paginate(page: number = 1, limit: number = 10, filter?: any) {
     const indexStart = (page - 1) * limit;
@@ -87,14 +87,14 @@ export class BaseService<Document> {
     if (sortBy != undefined) {
       delete filter.sortBy;
 
-      let [k, p] = sortBy.split(":");
+      let [k, p] = sortBy.split(':');
       let sort = {};
       sort[k] = p;
       query = query.sort(sort);
     }
-    query = query.find(filter)
+    query = query.find(filter);
 
-    let results = (await query);
+    let results = await query;
     const totalResults = (await this.documentSchema.find(filter)).length;
     const totalPages = Math.ceil(totalResults / limit);
 
@@ -102,8 +102,8 @@ export class BaseService<Document> {
       results: await this.documentSchema.populate(results, populateList),
       totalResults,
       totalPages,
-      limit,
-      page
+      limit: limit * 1,
+      page: page * 1,
     };
   }
 }

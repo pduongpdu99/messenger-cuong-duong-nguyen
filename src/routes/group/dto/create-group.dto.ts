@@ -1,10 +1,17 @@
-import { IsString } from "class-validator";
+import { Type } from 'class-transformer';
+import {
+  ArrayMinSize,
+  IsArray,
+  IsNotEmpty,
+} from 'class-validator';
 
 export class CreateGroupDto {
-    @IsString()
-    name?: string;
-    memberIds?: string[];
-    messageIds?: string[];
-    isDelete?: boolean;
-    isActive?: boolean;
+  @IsNotEmpty()
+  @IsArray()
+  @ArrayMinSize(2)
+  memberIds?: string[];
+
+  name?: string;
+
+  isDelete?: boolean = false;
 }

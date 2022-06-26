@@ -1,13 +1,23 @@
-import { IsNotEmpty } from "class-validator";
+import { IsDefined, IsNotEmpty, IsOptional, IsString } from 'class-validator';
 
 export class CreateMessageDto {
-    messageText: string;
+  @IsNotEmpty()
+  @IsDefined()
+  @IsString()
+  messageText: string;
 
-    urls: string[];
+  urls: string[];
 
-    @IsNotEmpty()
-    sentUserId: string;
+  @IsNotEmpty()
+  @IsDefined()
+  @IsString()
+  sentUserId: string;
 
-    hasEdited: boolean = false;
-    isDeleted: boolean = false;
+  @IsNotEmpty()
+  @IsDefined()
+  @IsString()
+  groupId: string;
+
+  hasEdited: boolean = false;
+  isDeleted: boolean = false;
 }

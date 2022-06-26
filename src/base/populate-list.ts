@@ -1,14 +1,11 @@
 export const populateList = [
-    {
-        path: 'nhomSPId'
+  {
+    path: 'sentUserId',
+  },
+  {
+    path: 'groupId',
+    populate: {
+      path: 'memberIds',
     },
-    {
-        path: 'areaId'
-    },
-    {
-        path: 'danhSachDatMuaIds'
-    },
-    {
-        path: 'productId'
-    },
-]
+  },
+];
