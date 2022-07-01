@@ -41,4 +41,30 @@ export class MessageService extends BaseService<Message> {
 
     return models;
   }
+
+  /**
+   * get last message from group
+   */
+  async getLastMessage(userId: string) {
+    let data = await this.messageModel.aggregate([
+      {
+        $group: {
+          _id: '$groupId',
+          message: {
+            $last: '$messageText',
+          },
+          sentUserId: {
+            $last: '$sentUserId',
+          },
+        },
+      },
+    ]);
+
+    return this.messageModel.populate(
+      data.filter((item) => item.sentUserId.toString() === userId),
+      {
+        path: 'sentUserId',
+      },
+    );
+  }
 }

@@ -8,4 +8,7 @@ export const populateList = [
       path: 'memberIds',
     },
   },
+  {
+    path: 'memberIds',
+  },
 ];

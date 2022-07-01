@@ -7,6 +7,7 @@ import {
   HttpCode,
   Query,
   ForbiddenException,
+  Param,
 } from '@nestjs/common';
 import { MessageService } from './message.service';
 import { CreateMessageDto } from './dto/create-message.dto';
@@ -38,12 +39,12 @@ export class MessageController extends BaseController<Message> {
   @HttpCode(201)
   @Post('multi-msg')
   createMessages(@Body() dtos: CreateMessageDto[]) {
-    const maps = dtos.map(dto => {
+    const maps = dtos.map((dto) => {
       dto.hasEdited = false;
       dto.isDeleted = false;
-      return dto
+      return dto;
     });
-    
+
     try {
       return this.messageService.createMessages(maps);
     } catch (err) {
@@ -69,6 +70,16 @@ export class MessageController extends BaseController<Message> {
     delete queryParams.limit;
     try {
       return await this.messageService.paginate(page, limit, queryParams);
+    } catch (err) {
+      throw new ForbiddenException();
+    }
+  }
+
+  @Get('last-message/:userId')
+  @HttpCode(200)
+  async getLastMessage(@Param('userId') userId: string) {
+    try {
+      return await this.messageService.getLastMessage(userId);
     } catch (err) {
       throw new ForbiddenException();
     }
