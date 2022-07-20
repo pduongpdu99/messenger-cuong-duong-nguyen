@@ -40,6 +40,7 @@ export class BaseService<Document> {
    * @returns
    */
   async update(updateDto: any) {
+    if (updateDto.id) updateDto._id = updateDto.id;
     const filter = { _id: updateDto._id };
     delete updateDto._id;
 

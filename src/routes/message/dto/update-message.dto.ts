@@ -15,4 +15,10 @@ export class UpdateMessageDto extends PartialType(CreateMessageDto) {
   urls: string[];
 
   hasEdited: boolean = true;
+
+  @IsOptional()
+  hasReaded: boolean;
+
+  @IsOptional()
+  isDeleted: boolean;
 }

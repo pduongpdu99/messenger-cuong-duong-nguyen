@@ -51,7 +51,7 @@ export class MessageService extends BaseService<Message> {
         $group: {
           _id: '$groupId',
           message: {
-            $last: '$messageText',
+            $last: '$_id',
           },
           sentUserId: {
             $last: '$sentUserId',
@@ -62,9 +62,14 @@ export class MessageService extends BaseService<Message> {
 
     return this.messageModel.populate(
       data.filter((item) => item.sentUserId.toString() === userId),
-      {
-        path: 'sentUserId',
-      },
+      [
+        {
+          path: 'sentUserId',
+        },
+        {
+          path: 'message',
+        }
+      ],
     );
   }
 }

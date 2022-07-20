@@ -20,4 +20,5 @@ export class CreateMessageDto {
 
   hasEdited: boolean = false;
   isDeleted: boolean = false;
+  hasReaded: boolean = false;
 }
